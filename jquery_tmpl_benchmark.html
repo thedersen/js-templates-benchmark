@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <title>JS Template Benchmarks: jQuery tmpl plugin</title>
+  <link rel="stylesheet" href="styles.css" type="text/css" media="screen" charset="utf-8" />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript"></script>
+  <script src="jquery.benchmark.js" type="text/javascript" charset="utf-8"></script>
+  <script src="jquery.tmpl.min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+  <div id="report">
+    <h1>JS Template Benchmarks: jQuery tmpl plugin</h1>
+    
+    <div id="results">
+      <ul>
+        <li>Simple Test: <span class="stat" id="simple_test"></span></li>
+        <li>Loop Test: <span class="stat" id="loop_test"></span></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div id="output"></div>
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+	    var output = $('#output');
+	    $.benchmarks = {};
+	
+      $.benchmarks.test_simple = function(){
+        var markup = '<div class="test"><h2>This is a test of ${name}</h2><p>The homepage is <a href="${url}">${url}</a>.</p><p>The sources is: ${source}</p></div>';
+		
+			$.tmpl( markup, {
+	          name: 'jQuery Templates', 
+	          url: 'http://api.jquery.com/category/plugins/templates/',
+	          source: 'http://github.com/jquery/jquery-tmpl'
+	        } ).appendTo( output );
+      };
+      
+      $.benchmarks.loop_test = function(){
+        $.template('templatename', '<li class="comment"><h5>${name}</h5><p>${body}</p></li>');
+        output.append('<div class="comments"><h3>Comments</h3><ul></ul></div>');
+        var ul = $('#output .comments:last ul:last');
+        var comments = [
+          {name: "Joe", body: "Thanks for this post!"},
+          {name: "Sam", body: "Thanks for this post!"},
+          {name: "Heather", body: "Thanks for this post!"},
+          {name: "Kathy", body: "Thanks for this post!"},
+          {name: "George", body: "Thanks for this post!"}
+        ];
+        comments_length = comments.length;
+        for (var i=0; i < comments_length; i++){
+			$.tmpl('templatename', comments[i]).appendTo( ul );
+        }
+      };
+      
+      // use these lines to run the benchmark tests in your browsers JS console
+      // $.benchmark(1000, '#simple_test', $.benchmarks.test_simple);
+      // $.benchmark(1000, '#loop_test', $.benchmarks.loop_test);
+    });
+  </script>
+</body>
+</html>
